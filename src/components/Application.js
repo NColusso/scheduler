@@ -5,7 +5,11 @@ import "components/Application.scss";
 import DayList from "./DayList";
 // import "components/Appointment";
 import Appointment from "components/Appointment";
-import { getAppointmentsForDay, getInterview } from "helpers/selectors";
+import {
+  getAppointmentsForDay,
+  getInterview,
+  getInterviewersForDay,
+} from "helpers/selectors";
 
 export default function Application(props) {
   const [state, setState] = useState({
@@ -17,18 +21,28 @@ export default function Application(props) {
   const setDay = (day) => setState({ ...state, day });
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
+  const dailyInterviewers = getInterviewersForDay(state, state.day);
 
   const schedule = dailyAppointments.map((appointment) => {
+    console.log(dailyAppointments);
+    console.log("appointment------>>>>", appointment);
+
     const interview = getInterview(state, appointment.interview);
+    console.log("interview------>>>>", interview);
+    console.log(state.day);
     return (
       <Appointment
         key={appointment.id}
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        interviewers={dailyInterviewers}
       />
     );
   });
+  const getDays = axios.get("http://localhost:8001/api/days");
+  const getAppointments = axios.get("http://localhost:8001/api/appointments");
+  const getInterViewers = axios.get("http://localhost:8001/api/interviewers");
 
   useEffect(() => {
     Promise.all([getDays, getAppointments, getInterViewers]).then((values) =>
@@ -40,14 +54,6 @@ export default function Application(props) {
       })
     );
   }, [state.day]);
-
-  const getDays = axios.get("http://localhost:8001/api/days");
-  const getAppointments = axios.get("http://localhost:8001/api/appointments");
-  const getInterViewers = axios.get("http://localhost:8001/api/interviewers");
-
-  const appointmentList = dailyAppointments.map((appointment) => (
-    <Appointment key={appointment.id} {...appointment} />
-  ));
 
   const lastAppt = <Appointment key="last" time="5pm" />;
 
