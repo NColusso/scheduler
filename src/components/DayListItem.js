@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 // import { action } from "@storybook/addon-actions/dist/preview";
 
 import "components/DayListItem.scss";
@@ -13,17 +13,21 @@ export default function DayListItem(props) {
     switch (spots) {
       case 0:
         return "no spots remaining";
-        break;
+
       case 1:
         return "1 spot remaining";
-        break;
+
       default:
         return `${spots} spots remaining`;
     }
   };
 
   return (
-    <li className={dayClass} onClick={() => props.setDay(props.name)}>
+    <li
+      className={dayClass}
+      data-testid="day"
+      onClick={() => props.setDay(props.name)}
+    >
       <h2 className={"text--regular"}>{props.name}</h2>
       <h3 className="text--light">{formatSpots(props.spots)}</h3>
     </li>

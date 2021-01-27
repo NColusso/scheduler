@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { action } from "@storybook/addon-actions/dist/preview";
+import React from "react";
+// import { action } from "@storybook/addon-actions/dist/preview";
 
 import "components/InterviewerListItem.scss";
 import classNames from "classnames";
