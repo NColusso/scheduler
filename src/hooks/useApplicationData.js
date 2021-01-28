@@ -43,22 +43,6 @@ export default function useApplicationData() {
       .then((res) => setState({ ...state, days, appointments }));
   }
 
-  // function getSpotsRemaining(state, day) {
-  //   const dayInfo = state.days.filter((days) => days.name === day);
-  //   let spotCount = 0;
-  //   console.log("dayInfo", dayInfo);
-  //   console.log("Appointments for that day", dayInfo[0].appointments);
-  //   for (const appt in state.appointments) {
-  //     if (
-  //       dayInfo[0].appointments.includes(state.appointments[appt].id) &&
-  //       !state.appointments[appt].interview
-  //     ) {
-  //       spotCount++;
-  //     }
-  //   }
-  //   return spotCount;
-  // }
-
   function getSpotsRemaining(appointments, day) {
     const todaySpots = day.appointments;
     let spotCount = 0;
