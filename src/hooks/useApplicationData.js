@@ -36,17 +36,7 @@ export default function useApplicationData() {
       [id]: appointment,
     };
 
-    const day = state.days.filter((day) => day.name === state.day);
-
-    const updatedDay = { ...day[0], spots: day[0].spots - 1 };
-
-    const otherDays = state.days.filter((day) => day.name !== state.day);
-
-    const days = [...otherDays, updatedDay];
-
-    days.sort((a, b) => {
-      return a.id - b.id;
-    });
+    const days = displayDaysWithSpots(state.days, appointments);
 
     return axios
       .put(`http://localhost:8001/api/appointments/${id}`, appointment)
@@ -69,6 +59,26 @@ export default function useApplicationData() {
   //   return spotCount;
   // }
 
+  function getSpotsRemaining(appointments, day) {
+    const todaySpots = day.appointments;
+    let spotCount = 0;
+
+    for (const spot of todaySpots) {
+      if (!appointments[spot].interview) {
+        spotCount++;
+      }
+    }
+    return spotCount;
+  }
+
+  function displayDaysWithSpots(days, appointments) {
+    const dailyWSpots = days.map((day) => ({
+      ...day,
+      spots: getSpotsRemaining(appointments, day),
+    }));
+    return dailyWSpots;
+  }
+
   function cancelInterview(id) {
     const appointment = {
       ...state.appointments[id],
@@ -79,17 +89,8 @@ export default function useApplicationData() {
       [id]: appointment,
     };
 
-    const day = state.days.filter((day) => day.name === state.day);
+    const days = displayDaysWithSpots(state.days, appointments);
 
-    const updatedDay = { ...day[0], spots: day[0].spots + 1 };
-
-    const otherDays = state.days.filter((day) => day.name !== state.day);
-
-    const days = [...otherDays, updatedDay];
-
-    days.sort((a, b) => {
-      return a.id - b.id;
-    });
     return axios
       .delete(`http://localhost:8001/api/appointments/${id}`)
       .then((res) => setState({ ...state, days, appointments }));

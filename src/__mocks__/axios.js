@@ -72,7 +72,7 @@ export default {
       });
     }
 
-    if (url === "/api/interviewers") {
+    if (url === "/api/interviewers" || url === "/api/interviewers/:id") {
       return Promise.resolve({
         status: 200,
         statusText: "OK",
@@ -81,6 +81,12 @@ export default {
     }
   }),
   put: jest.fn(() => {
+    return Promise.resolve({
+      status: 200,
+      statusText: "OK",
+    });
+  }),
+  delete: jest.fn(() => {
     return Promise.resolve({
       status: 200,
       statusText: "OK",
